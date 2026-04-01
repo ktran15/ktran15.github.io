@@ -108,35 +108,44 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "1.5rem",
-          flexWrap: "wrap",
-          alignItems: "flex-start",
-          marginTop: "2rem",
-        }}
-      >
-        <div className="polaroid tilt-left" style={{ maxWidth: "200px" }}>
-          <img
-            src="/images/visual-mosaic.svg"
-            alt="Placeholder collage"
-            style={{ width: "100%", display: "block" }}
-          />
-          <p className="polaroid-caption">heritage</p>
-        </div>
+      <div style={{ marginTop: "1rem" }}>
+        {mosaicTiles.map((tile, i) => {
+          const imageOnLeft = i % 2 === 0;
+          return (
+            <div
+              key={tile.id}
+              style={{
+                display: "flex",
+                flexDirection: imageOnLeft ? "row" : "row-reverse",
+                gap: "2rem",
+                alignItems: "center",
+                flexWrap: "wrap",
+                marginBottom: "3rem",
+              }}
+            >
+              <div
+                className={`polaroid ${imageOnLeft ? "tilt-left" : "tilt-right"}`}
+                style={{
+                  flex: "0 0 auto",
+                  maxWidth: "340px",
+                  width: "100%",
+                }}
+              >
+                <img
+                  src={tile.image}
+                  alt={tile.title}
+                  style={{ width: "100%", display: "block", borderRadius: "4px" }}
+                />
+                <p className="polaroid-caption">{tile.micro}</p>
+              </div>
 
-        <div style={{ flex: "1 1 320px" }}>
-          {mosaicTiles.map((tile) => (
-            <div key={tile.id} style={{ marginBottom: "1.75rem" }}>
-              <h3>{tile.title}</h3>
-              <p style={{ color: "var(--ink-light)", fontSize: "0.95rem", margin: "0 0 0.35rem" }}>
-                {tile.micro}
-              </p>
-              <p>{tile.body}</p>
+              <div style={{ flex: "1 1 300px", minWidth: 0 }}>
+                <h3 style={{ marginTop: 0 }}>{tile.title}</h3>
+                <p style={{ lineHeight: 1.7 }}>{tile.body}</p>
+              </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
