@@ -5,7 +5,7 @@ const chapters = [
   { to: "/about", label: "About me" },
   { to: "/projects", label: "Projects" },
   { to: "/play/scrapbook", label: "Play" },
-  { to: "/writing", label: "Writing" },
+  { to: "/blog", label: "Blog" },
 ];
 
 export default function HomeLanding() {
@@ -13,7 +13,7 @@ export default function HomeLanding() {
     <div>
       <div style={{ maxWidth: "640px" }}>
         <h1>
-          Hi, I'm Kevin.
+          Hi, I'm Keith.
         </h1>
         <p className="lead">
           Computer Engineering student at Georgia Tech. I build systems
@@ -57,13 +57,12 @@ export default function HomeLanding() {
           style={{ maxWidth: "220px" }}
         >
           <img
-            src="/images/visual-hero.svg"
-            alt="Placeholder for a photo of Kevin"
+            src="/images/headshot.png"
+            alt="Photo of Keith Tran"
             width={200}
             height={200}
             style={{ width: "100%", height: "auto", display: "block" }}
           />
-          <p className="polaroid-caption">replace with your photo</p>
         </div>
       </div>
 

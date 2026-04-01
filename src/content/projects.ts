@@ -1,4 +1,4 @@
-﻿export type Project = {
+export type Project = {
   slug: string;
   title: string;
   tagline: string;
@@ -12,44 +12,37 @@
 
 export const projects: Project[] = [
   {
-    slug: "mixed-signal-instrument",
-    title: "Mixed-signal lab instrument",
-    tagline: "A bench tool that turns messy analog signals into trustworthy measurements.",
-    role: "Firmware, analog front-end bring-up, UI",
-    stack: ["C", "STM32", "SPI", "Python"],
+    slug: "piano-led-visualizer",
+    title: "Piano Audio-Reactive LED Visualization",
+    tagline: "Turning every note into a real-time light show driven by microcontroller signal processing.",
+    role: "Discovery Project",
+    stack: [
+      "Embedded C",
+      "Microcontrollers",
+      "Signal Processing",
+      "Analog Circuits",
+      "FFT",
+      "PWM",
+      "SPI",
+      "MIDI",
+      "LED Matrix",
+    ],
     coverImage: "/images/visual-project-a.svg",
-    gallery: ["/images/visual-project-a.svg", "/images/visual-project-b.svg"],
-    body: `This project started where most interesting hardware projects do: with a question that sounded simple and a prototype that refused to cooperate. I wanted a small instrument that could sample an analog waveform with enough fidelity to debug real circuits in my lab courses, while still feeling approachable on a laptop screen. The goal was not a commercial product; it was a disciplined exercise in constraints, noise, and the boring details that separate a demo from a dependable tool.
+    gallery: ["/images/visual-project-a.svg"],
+    body: `The idea behind this project is deceptively simple: play a note on the piano and watch a strip of LEDs respond in real time, painting color across a room in sync with every chord, run, and rest. What makes the project genuinely interesting is the engineering hiding behind that experience. Bridging the gap between an acoustic instrument and a programmable light display demands careful thinking about analog signal capture, digital signal processing on a resource-constrained microcontroller, and precise timing so the visuals never feel late.
 
-The first iterations taught me how quickly analog front-ends punish optimism. Ground references, reference voltages, and clock edges all had opinions. I spent time with the oscilloscope probing points I had drawn confidently in a schematic, then rewired with more humility. I learned to treat every long trace as an antenna and every connector as a question mark. Documenting those failures became part of the project: short lab notes with photos, capture settings, and what changed between revisions.
+Audio capture is the first challenge. The system supports two input paths. A small electret microphone paired with a pre-amplifier circuit picks up the acoustic output of the piano, while an optional MIDI breakout board can tap the digital note data directly from instruments that support it. The microphone path is the more demanding one: the raw analog signal needs conditioning through a bandpass filter to reject noise outside the musical range, followed by analog-to-digital conversion at a sample rate high enough to resolve individual notes across the keyboard. Designing and tuning that analog front-end taught me more about op-amp biasing, decoupling, and ground routing than any textbook exercise.
 
-On the embedded side, I focused on deterministic sampling and predictable timing. I wrote interrupt-driven acquisition paths, validated them against a known function generator, and built a small calibration routine so the digital readings tracked reality across temperature drift. Where I could, I automated checks: a Python script that sweeps inputs and compares expected versus measured curves, exporting CSVs I could drop into a report.
+Once the signal is digitized, the microcontroller performs real-time frequency analysis. A lightweight FFT running on the MCU decomposes each audio frame into frequency bins, letting the firmware identify which notes are currently active and how loud they are. Mapping those bins to LED colors is where the creative decisions live: lower notes might glow warm amber while upper-register trills flash cool blue, and the brightness tracks the volume envelope so soft passages dim and fortissimo chords saturate the strip. Keeping this pipeline within the MCU's cycle budget is a constant exercise in profiling and trade-offs — choosing a smaller FFT window for lower latency versus a larger one for better frequency resolution, and deciding where fixed-point arithmetic can replace floating-point without visible artifacts.
 
-The UI layer was intentionally minimal: readable scales, a stable frame rate, and clear labeling so someone other than me could use the tool during a study session without a tutorial. I prioritized keyboard-friendly controls and high-contrast modes for late-night bench work.
+Driving the LED hardware introduces its own constraints. The system uses addressable RGB LEDs controlled over a single-wire protocol that demands precise sub-microsecond timing. The firmware generates the data stream using a combination of hardware timers and DMA transfers so the CPU stays free to continue processing the next audio frame. For larger installations with LED matrices instead of strips, an SPI-based driver handles the higher data throughput. Power management matters too: a full strip at maximum brightness can draw several amps, so the board includes current-sense feedback and a soft brightness cap to protect the supply.
 
-Results: a repeatable measurement pipeline I trust for coursework and personal projects, and a portfolio story I can defend in interviews. The instrument is not perfect, but it is honest about its limits, and I can point to specific design decisions that trade accuracy for speed, cost, or complexity. Next steps I want to explore include better isolation on the front-end, richer triggering options, and a structured data export path for longer captures.`,
-  },
-  {
-    slug: "connected-embedded-gateway",
-    title: "Connected embedded gateway",
-    tagline: "Bridging UART sensors to a web dashboard without sacrificing debuggability.",
-    role: "System design, protocol design, React UI",
-    stack: ["Embedded C", "WebSockets", "React", "TypeScript"],
-    coverImage: "/images/visual-project-b.svg",
-    gallery: ["/images/visual-project-b.svg", "/images/visual-project-a.svg"],
-    body: `Some projects are defined by a single flashy demo. This one was defined by the quiet work of making many small pieces agree on the truth. I set out to connect a handful of UART-based sensors to a browser dashboard so I could monitor a system remotely during long-running tests. The catch: I still wanted the embedded side to remain easy to debug with a serial terminal when the network misbehaved.
+From an ECE perspective, this project ties together skills I have been developing across my coursework: analog-to-digital conversion, discrete-time signal processing, embedded firmware with hard real-time deadlines, communication protocols like SPI and single-wire interfaces, and PWM-based power control. It also forced me to practice system-level thinking — a beautiful FFT result is useless if the LED update latency makes the lights feel sluggish, and a fast LED driver is pointless if the audio front-end clips on loud passages.
 
-I began by defining a compact framing format for sensor packets: fixed headers, checksums, and explicit length fields so partial reads could not silently corrupt state. On the microcontroller, I implemented a small state machine for parsing, with defensive resets when the line noise won. I logged anomalies to a circular buffer I could dump later, because the most valuable bugs only appear after hours of uptime.
-
-The bridge layer translated UART frames into WebSocket messages for the browser. I chose WebSockets for low latency and simple back-pressure handling during bursts. On the web client, I built a React dashboard with a focus on readability: sparklines for trends, tables for exact values, and a dedicated panel for connection health. I avoided clever CSS; I wanted the interface to feel like a trustworthy instrument panel.
-
-Along the way, I rehearsed the story I would tell a teammate or interviewer: what broke, what I measured, and what I changed. I practiced explaining trade-offs in plain language, not jargon. The outcome is a system I can extend with additional sensors, and a narrative that highlights how I think about reliability, observability, and user-centered engineeringâ€”even when the user is me.
-
-If I continue this project, I will add authenticated sessions, structured historical storage, and automated regression tests that replay captured UART traces to prevent regressions.`,
+Next steps include adding a small OLED display for live spectrum visualization, implementing beat detection so the lights can pulse with rhythmic patterns, and packaging the hardware into a clean enclosure that sits on top of an upright piano. I also want to document the build with detailed schematics, annotated firmware, and a short demo video so other students can adapt the design for their own instruments or performances.`,
   },
 ];
 
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
-

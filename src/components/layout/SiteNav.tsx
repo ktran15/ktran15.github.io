@@ -5,7 +5,7 @@ const links: { to: string; label: string; match?: (p: string) => boolean }[] = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects", match: (p) => p.startsWith("/projects") },
   { to: "/play/scrapbook", label: "Play", match: (p) => p.startsWith("/play") },
-  { to: "/writing", label: "Writing", match: (p) => p.startsWith("/writing") },
+  { to: "/blog", label: "Blog", match: (p) => p.startsWith("/blog") },
   { to: "/resume", label: "Resume" },
   { to: "/contact", label: "Contact" },
 ];

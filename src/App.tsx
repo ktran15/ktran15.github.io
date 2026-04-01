@@ -1,4 +1,4 @@
-﻿import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import RootLayout from "./components/layout/RootLayout";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
@@ -29,8 +29,8 @@ export default function App() {
           <Route path="garden" element={<GardenPanel />} />
           <Route path="baking" element={<BakingPanel />} />
         </Route>
-        <Route path="writing" element={<WritingPage />} />
-        <Route path="writing/:slug" element={<PostPage />} />
+        <Route path="blog" element={<WritingPage />} />
+        <Route path="blog/:slug" element={<PostPage />} />
         <Route path="contact" element={<ContactPage />} />
         <Route path="resume" element={<ResumePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />

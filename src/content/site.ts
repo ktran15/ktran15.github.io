@@ -1,10 +1,10 @@
-﻿export const site = {
-  name: "Kevin Tran",
+export const site = {
+  name: "Keith Tran",
   tagline: "Computer Engineering @ Georgia Tech",
-  email: "you@example.edu",
+  email: "ktran380@gatech.edu",
   links: {
     github: "https://github.com/ktran15",
-    linkedin: "https://www.linkedin.com/",
+    linkedin: "https://www.linkedin.com/in/keith-tran-645302295/",
   },
 };
 
