@@ -61,6 +61,8 @@ export default function HomeLanding() {
             alt="Photo of Keith Tran"
             width={200}
             height={200}
+            fetchPriority="high"
+            decoding="async"
             style={{ width: "100%", height: "auto", display: "block" }}
           />
         </div>

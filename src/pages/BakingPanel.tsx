@@ -23,7 +23,10 @@ export default function BakingPanel() {
               <img
                 src={r.image}
                 alt={r.title}
+                width={240}
+                height={200}
                 loading="lazy"
+                decoding="async"
                 style={{
                   width: "100%",
                   height: "200px",

@@ -16,6 +16,10 @@ export default function GardenPanel() {
           <img
             src="/images/garden-photo.jpg"
             alt="Brooklyn Community Garden"
+            width={320}
+            height={240}
+            loading="lazy"
+            decoding="async"
             style={{ width: "100%", display: "block" }}
           />
           <p className="polaroid-caption">Brooklyn Community Garden</p>

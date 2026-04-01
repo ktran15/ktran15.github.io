@@ -48,6 +48,10 @@ export default function ContactPage() {
             <img
               src="/images/headshot.png"
               alt="Keith Tran"
+              width={220}
+              height={220}
+              loading="lazy"
+              decoding="async"
               style={{ width: "100%", display: "block" }}
             />
           </div>

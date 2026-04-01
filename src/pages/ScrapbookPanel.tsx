@@ -87,6 +87,10 @@ export default function ScrapbookPanel() {
         <img
           src="/images/camera-keith.jpg"
           alt="Keith with camera"
+          width={140}
+          height={140}
+          loading="lazy"
+          decoding="async"
           style={{
             width: "140px",
             height: "140px",
@@ -169,7 +173,10 @@ export default function ScrapbookPanel() {
                     <img
                       src={photo.src}
                       alt={photo.caption}
+                      width={320}
+                      height={213}
                       loading="lazy"
+                      decoding="async"
                       style={{ width: "100%", display: "block" }}
                     />
                     <p className="polaroid-caption">{photo.caption}</p>

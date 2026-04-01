@@ -38,6 +38,10 @@ export default function AboutPage() {
               <img
                 src="/images/welcome-keith.jpg"
                 alt="Keith Tran"
+                width={200}
+                height={200}
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: "100%",
                   height: "100%",
@@ -134,6 +138,10 @@ export default function AboutPage() {
                 <img
                   src={tile.image}
                   alt={tile.title}
+                  width={680}
+                  height={382}
+                  loading="lazy"
+                  decoding="async"
                   style={{ width: "100%", display: "block", borderRadius: "4px" }}
                 />
                 <p className="polaroid-caption">{tile.micro}</p>
