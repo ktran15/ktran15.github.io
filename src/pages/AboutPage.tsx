@@ -38,8 +38,6 @@ export default function AboutPage() {
               <img
                 src="/images/welcome-keith.jpg"
                 alt="Keith Tran"
-                width={200}
-                height={200}
                 loading="lazy"
                 decoding="async"
                 style={{
