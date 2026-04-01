@@ -4,7 +4,7 @@ import { welcomeBullets } from "../../content/site";
 const chapters = [
   { to: "/about", label: "About me" },
   { to: "/projects", label: "Projects" },
-  { to: "/play/scrapbook", label: "Play" },
+  { to: "/play/scrapbook", label: "Hobbies" },
   { to: "/blog", label: "Blog" },
 ];
 

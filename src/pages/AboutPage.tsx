@@ -4,16 +4,66 @@ import { careerGoals } from "../content/site";
 export default function AboutPage() {
   return (
     <div>
-      {/* Welcome statement */}
+      {/* Welcome statement with photo */}
       <section style={{ marginBottom: "2.5rem" }}>
-        <h1>Welcome</h1>
-        <p className="lead" style={{ maxWidth: "62ch" }}>
-          Thanks for stopping by! I'm Keith Tran, a Computer Engineering
-          student at Georgia Tech. This site is a window into who I am — the
-          projects I build, the stories that shaped me, and the things I care
-          about beyond the classroom. I hope you find something here that
-          resonates, and I'd love to connect.
-        </p>
+        <div style={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: "2rem",
+          flexWrap: "wrap",
+        }}>
+          <div style={{ flex: "1 1 320px" }}>
+            <h1>Welcome</h1>
+            <p className="lead" style={{ maxWidth: "56ch" }}>
+              Thanks for stopping by! I'm Keith Tran, a Computer Engineering
+              student at Georgia Tech. This site is a window into who I am — the
+              projects I build, the stories that shaped me, and the things I care
+              about beyond the classroom. I hope you find something here that
+              resonates, and I'd love to connect.
+            </p>
+          </div>
+
+          {/* Welcome photo with GT badge */}
+          <div style={{ position: "relative", flexShrink: 0, alignSelf: "center" }}>
+            <div
+              style={{
+                width: "200px",
+                height: "200px",
+                border: "4px solid var(--gold, #B3A369)",
+                borderRadius: "12px",
+                overflow: "hidden",
+                background: "var(--cream, #faf8f4)",
+              }}
+            >
+              <img
+                src="/images/welcome-keith.jpg"
+                alt="Keith Tran"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center 20%",
+                  display: "block",
+                }}
+              />
+            </div>
+            <img
+              src="/images/gt-logo.svg"
+              alt="Georgia Tech"
+              style={{
+                position: "absolute",
+                bottom: "-10px",
+                right: "-10px",
+                width: "48px",
+                height: "auto",
+                background: "var(--cream, #faf8f4)",
+                borderRadius: "6px",
+                padding: "2px 4px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+              }}
+            />
+          </div>
+        </div>
       </section>
 
       <hr className="wavy-rule" />

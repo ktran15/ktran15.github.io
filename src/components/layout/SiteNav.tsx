@@ -4,7 +4,7 @@ import { site } from "../../content/site";
 const links: { to: string; label: string; match?: (p: string) => boolean }[] = [
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects", match: (p) => p.startsWith("/projects") },
-  { to: "/play/scrapbook", label: "Play", match: (p) => p.startsWith("/play") },
+  { to: "/play/scrapbook", label: "Hobbies & Interests", match: (p) => p.startsWith("/play") },
   { to: "/blog", label: "Blog", match: (p) => p.startsWith("/blog") },
   { to: "/resume", label: "Resume" },
   { to: "/contact", label: "Contact" },

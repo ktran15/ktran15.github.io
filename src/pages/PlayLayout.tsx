@@ -10,10 +10,10 @@ const tabs = [
 export default function PlayLayout() {
   return (
     <div>
-      <h1>Play</h1>
+      <h1>Hobbies &amp; Interests</h1>
       <p className="lead">
-        Photos, piano, the Hendersonville community garden, and
-        recipes I bake or keep on repeat.
+        Photography, piano, the Hendersonville community garden, and
+        recipes I bake on repeat.
       </p>
       <nav className="play-tabs" aria-label="Play sections">
         {tabs.map(({ to, label }) => (
