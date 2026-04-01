@@ -1,29 +1,46 @@
-﻿export type Recipe = {
+export type Recipe = {
   id: string;
   title: string;
   note: string;
+  image?: string;
   url?: string;
   tags: string[];
 };
 
 export const recipes: Recipe[] = [
   {
-    id: "r1",
-    title: "Sourdough focaccia (weekend bake)",
-    note: "Replace with your own story once you paste links. I keep a wet dough and fold twice before the overnight cold proof.",
-    url: "https://example.com/recipe-placeholder",
-    tags: ["bread", "sourdough"],
+    id: "brownies",
+    title: "Hershey's Chocolate Brownies",
+    note: "Rich, fudgy brownies topped with broken Hershey's bar pieces. Best served warm.",
+    image: "/images/baking/brownies.jpg",
+    tags: ["brownies", "chocolate"],
   },
   {
-    id: "r2",
-    title: "Vietnamese coffee chiffon (experiment)",
-    note: "A sweet nod to home flavors; swap in your real recipe URL and a photo of your slice.",
-    tags: ["cake", "coffee"],
+    id: "strawberry-cake",
+    title: "Strawberry Shortcake",
+    note: "Layers of vanilla cake, fresh strawberries, and whipped cream. Messy but worth it.",
+    image: "/images/baking/strawberry-cake.jpg",
+    tags: ["cake", "fruit"],
   },
   {
-    id: "r3",
-    title: "Brown butter chocolate chip cookies",
-    note: "My reliable crowd pleaserâ€”chill the dough if you want thicker cookies.",
-    tags: ["cookies", "baking"],
+    id: "oatmeal-cookies",
+    title: "Iced Oatmeal Cookies",
+    note: "Soft oatmeal cookies with a simple powdered sugar glaze drizzled on top.",
+    image: "/images/baking/oatmeal-cookies.jpg",
+    tags: ["cookies", "oatmeal"],
+  },
+  {
+    id: "cinnamon-rolls",
+    title: "Homemade Cinnamon Rolls",
+    note: "Soft, pillowy rolls with cinnamon-sugar filling and cream cheese frosting.",
+    image: "/images/baking/cinnamon-rolls.jpg",
+    tags: ["bread", "cinnamon"],
+  },
+  {
+    id: "chocolate-chip",
+    title: "Chocolate Chip Cookies",
+    note: "The classic. Crispy edges, chewy center, plenty of chocolate chips.",
+    image: "/images/baking/chocolate-chip-cookies.jpg",
+    tags: ["cookies", "chocolate"],
   },
 ];

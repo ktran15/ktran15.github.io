@@ -12,25 +12,27 @@ export default function GardenPanel() {
           marginTop: "1rem",
         }}
       >
-        <div className="polaroid tilt-slight" style={{ maxWidth: "240px" }}>
+        <div className="polaroid tilt-slight" style={{ maxWidth: "320px" }}>
           <img
-            src="/images/visual-garden.svg"
-            alt="Garden placeholder"
+            src="/images/garden-photo.jpg"
+            alt="Brooklyn Community Garden"
             style={{ width: "100%", display: "block" }}
           />
-          <p className="polaroid-caption">Hendersonville, TN</p>
+          <p className="polaroid-caption">Brooklyn Community Garden</p>
         </div>
 
         <div style={{ flex: "1 1 300px" }}>
           <p>
-            I was part of my city of <strong>Hendersonville's</strong>{" "}
+            I was part of my city's{" "}
             <strong>first community garden</strong>. It taught me
             patience: soil, seasons, and showing up for neighbors even
             when the weather disagrees.
           </p>
           <p>
-            Drop in your own garden photos when ready — this spot holds
-            the story until then.
+            There's something grounding about working with your hands in the
+            dirt after a week of staring at code and circuits. The garden
+            reminded me that good things take time, consistent effort, and a
+            willingness to learn from what doesn't grow.
           </p>
         </div>
       </div>

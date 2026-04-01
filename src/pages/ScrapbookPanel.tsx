@@ -51,24 +51,22 @@ const tilts = ["tilt-left", "tilt-right", ""];
 
 export default function ScrapbookPanel() {
   const wrap = useRef<HTMLDivElement>(null);
-  const left = useRef<HTMLDivElement>(null);
-  const right = useRef<HTMLDivElement>(null);
+  const cover = useRef<HTMLDivElement>(null);
   const [opened, setOpened] = useState(false);
   const [page, setPage] = useState(0);
   const reduced = usePrefersReducedMotion();
 
   useLayoutEffect(() => {
-    if (!opened || reduced || !left.current || !right.current) return;
+    if (!opened || reduced || !cover.current) return;
     const ctx = gsap.context(() => {
-      gsap.to(left.current, { xPercent: -100, duration: 0.85, ease: "power2.inOut" });
-      gsap.to(right.current, { xPercent: 100, duration: 0.85, ease: "power2.inOut" });
+      gsap.to(cover.current, { opacity: 0, duration: 0.6, ease: "power2.inOut" });
     }, wrap);
     return () => ctx.revert();
   }, [opened, reduced]);
 
   const reset = () => {
-    if (left.current && right.current) {
-      gsap.set([left.current, right.current], { xPercent: 0 });
+    if (cover.current) {
+      gsap.set(cover.current, { opacity: 1 });
     }
     setOpened(false);
     setPage(0);
@@ -131,7 +129,6 @@ export default function ScrapbookPanel() {
         <div style={{ padding: "2rem 2rem 1.5rem 2.5rem", position: "relative", zIndex: 1 }}>
           {opened && (
             <>
-              {/* Page header */}
               <div style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -157,7 +154,6 @@ export default function ScrapbookPanel() {
                 </span>
               </div>
 
-              {/* Photo grid for this page */}
               <div
                 style={{
                   display: "grid",
@@ -181,7 +177,6 @@ export default function ScrapbookPanel() {
                 ))}
               </div>
 
-              {/* Page navigation */}
               <div style={{
                 display: "flex",
                 justifyContent: "center",
@@ -223,86 +218,32 @@ export default function ScrapbookPanel() {
           )}
         </div>
 
-        {/* Left cover */}
-        <div
-          ref={left}
-          className="book-cover"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "50%",
-            height: "100%",
-            zIndex: 5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            paddingRight: "1.5rem",
-          }}
-        >
-          {!opened && (
-            <span style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "1.6rem",
-              fontStyle: "italic",
-              color: "var(--ink-light)",
-              textAlign: "right",
-            }}>
-              My<br />Scrapbook
-            </span>
-          )}
-        </div>
-
-        {/* Right cover */}
-        <div
-          ref={right}
-          className="book-cover book-cover-right"
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: "50%",
-            height: "100%",
-            zIndex: 5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            paddingLeft: "1.5rem",
-          }}
-        >
-          {!opened && (
-            <div style={{ textAlign: "left" }}>
-              <span style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "1.1rem",
-                fontStyle: "italic",
-                color: "var(--ink-light)",
-                display: "block",
-                marginBottom: "0.25rem",
-              }}>
-                {photos.length} photos
-              </span>
-              <span style={{
-                fontSize: "0.85rem",
-                color: "var(--ink-faint, #aaa)",
-              }}>
-                Italy &middot; Atlanta &middot; Mountains &middot; Coast
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Open button overlay */}
+        {/* Single clean cover overlay */}
         {!opened && (
           <div
+            ref={cover}
             style={{
               position: "absolute",
               inset: 0,
-              display: "grid",
-              placeItems: "center",
               zIndex: 6,
+              background: "linear-gradient(135deg, #d4c4a8 0%, #c9b896 50%, #bfae88 100%)",
+              borderRadius: "6px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "1.5rem",
             }}
           >
+            <span style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "1.8rem",
+              fontStyle: "italic",
+              color: "#5a4e3a",
+              textAlign: "center",
+            }}>
+              My Scrapbook
+            </span>
             <button
               type="button"
               className="btn btn-fill"
