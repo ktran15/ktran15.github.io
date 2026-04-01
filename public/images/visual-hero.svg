@@ -1,1 +1,6 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" fill="none"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2620"/><stop offset="1" stop-color="#1a1814"/></linearGradient></defs><rect width="400" height="280" fill="url(#g)"/><circle cx="200" cy="120" r="72" stroke="#e8a598" stroke-width="2" opacity=".9"/><path d="M120 200c40-48 120-48 160 0" stroke="#c4b8a8" stroke-width="2"/><text x="200" y="250" text-anchor="middle" fill="#8a8278" font-family="system-ui" font-size="14">chapter map</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none">
+  <rect width="400" height="400" fill="#f0ece4"/>
+  <circle cx="200" cy="180" r="80" fill="#e8dfd0" stroke="#c4654a" stroke-width="2"/>
+  <rect x="140" y="280" width="120" height="16" rx="8" fill="#c4654a" opacity="0.25"/>
+  <text x="200" y="340" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#6b6058">your photo here</text>
+</svg>

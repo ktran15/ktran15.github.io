@@ -1,1 +1,8 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect fill="#2d3a2d" width="320" height="200"/><rect x="40" y="100" width="240" height="60" fill="#3d4f38" stroke="#8fbc8f"/><path d="M160 100 Q140 40 160 20 Q180 40 160 100" fill="#6ab06a"/><circle cx="90" cy="70" r="18" fill="#f4d35e" opacity=".9"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" fill="none">
+  <rect width="400" height="280" fill="#eef3e8"/>
+  <rect x="60" y="160" width="280" height="60" rx="4" fill="#d4c8a0" stroke="#6a8c6a" stroke-width="1.5"/>
+  <path d="M200 160 Q180 80 200 50 Q220 80 200 160" fill="#6a8c6a" opacity="0.7"/>
+  <path d="M140 160 Q125 100 140 75 Q155 100 140 160" fill="#8aac7a" opacity="0.6"/>
+  <path d="M260 160 Q248 110 260 85 Q272 110 260 160" fill="#7a9c6a" opacity="0.65"/>
+  <circle cx="320" cy="50" r="28" fill="#c49a3a" opacity="0.3"/>
+</svg>

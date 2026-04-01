@@ -1,16 +1,22 @@
 export default function ResumePage() {
   return (
     <div>
-      <p className="mono-label">Resume</p>
-      <h1 style={{ marginTop: "0.35rem" }}>Resume</h1>
-      <p className="lede">
-        Add your PDF as <code>public/resume.pdf</code>, commit, and push. The download button below will work automatically on GitHub Pages.
+      <h1>Resume</h1>
+      <p className="lead">
+        Add your PDF as <code>public/resume.pdf</code>, then the
+        download link below works automatically.
       </p>
-      <a className="btn" href="/resume.pdf" download style={{ marginTop: "1rem" }}>
+      <a
+        className="btn btn-fill"
+        href="/resume.pdf"
+        download
+        style={{ marginTop: "0.5rem" }}
+      >
         Download PDF
       </a>
-      <p style={{ marginTop: "1.5rem", maxWidth: "55ch" }}>
-        Until the file exists, the link may 404 â€” that is expected. You can also embed a viewer later once the PDF is in place.
+      <p style={{ marginTop: "1.5rem", color: "var(--ink-light)" }}>
+        If the file isn't there yet, the link will 404 — that's
+        expected.
       </p>
     </div>
   );

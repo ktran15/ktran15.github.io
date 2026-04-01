@@ -1,4 +1,4 @@
-﻿import { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
@@ -27,29 +27,40 @@ export default function ScrapbookPanel() {
 
   return (
     <section>
-      <h2>Photography scrapbook</h2>
-      <p>Replace placeholders with your own photography â€” keep the spreads as wide as you like.</p>
+      <h2>Photography</h2>
+      <p>
+        Replace the placeholders with your own shots. The
+        scrapbook interaction stays.
+      </p>
+
       <div
         ref={wrap}
         style={{
           position: "relative",
           marginTop: "1.5rem",
-          borderRadius: "var(--radius)",
           overflow: "hidden",
           minHeight: "300px",
-          border: "1px solid color-mix(in srgb, var(--fg) 12%, transparent)",
-          background: "color-mix(in srgb, var(--fg) 5%, transparent)",
+          background: "#fff",
+          boxShadow: "0 2px 16px rgba(42,37,34,0.08)",
+          borderRadius: "4px",
         }}
       >
-        <div style={{ padding: "1.5rem" }}>
-          <p className="mono-label">Inside spread</p>
-          <div className="grid-2" style={{ marginTop: "1rem" }}>
-            <img src="/images/visual-hero.svg" alt="Placeholder album spread 1" style={{ width: "100%", borderRadius: "8px" }} />
-            <img src="/images/visual-garden.svg" alt="Placeholder album spread 2" style={{ width: "100%", borderRadius: "8px" }} />
+        {/* Inside spread */}
+        <div style={{ padding: "2rem", display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
+          <div className="polaroid tilt-left" style={{ maxWidth: "220px" }}>
+            <img src="/images/visual-hero.svg" alt="Placeholder 1" />
+            <p className="polaroid-caption">your photo here</p>
+          </div>
+          <div className="polaroid tilt-right" style={{ maxWidth: "220px" }}>
+            <img src="/images/visual-garden.svg" alt="Placeholder 2" />
+            <p className="polaroid-caption">your photo here</p>
           </div>
         </div>
+
+        {/* Left cover */}
         <div
           ref={left}
+          className="book-cover"
           style={{
             position: "absolute",
             top: 0,
@@ -57,17 +68,19 @@ export default function ScrapbookPanel() {
             width: "50%",
             height: "100%",
             zIndex: 2,
-            background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 30%, var(--bg)), var(--bg))",
-            borderRight: "1px solid color-mix(in srgb, var(--fg) 15%, transparent)",
-            display: "grid",
-            placeItems: "center",
-            padding: "1rem",
           }}
         >
-          {!opened && <span className="mono-label">Left cover</span>}
+          {!opened && (
+            <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--ink-light)" }}>
+              Scrapbook
+            </span>
+          )}
         </div>
+
+        {/* Right cover */}
         <div
           ref={right}
+          className="book-cover book-cover-right"
           style={{
             position: "absolute",
             top: 0,
@@ -75,29 +88,43 @@ export default function ScrapbookPanel() {
             width: "50%",
             height: "100%",
             zIndex: 2,
-            background: "linear-gradient(-135deg, color-mix(in srgb, var(--accent) 22%, var(--bg)), var(--bg))",
-            borderLeft: "1px solid color-mix(in srgb, var(--fg) 12%, transparent)",
-            display: "grid",
-            placeItems: "center",
-            padding: "1rem",
           }}
         >
-          {!opened && <span className="mono-label">Right cover</span>}
+          {!opened && (
+            <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", color: "var(--ink-light)" }}>
+              Photos
+            </span>
+          )}
         </div>
+
+        {/* Open button overlay */}
         {!opened && (
-          <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", pointerEvents: "auto", zIndex: 4 }}>
-            <button type="button" className="btn" onClick={() => setOpened(true)}>
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              display: "grid",
+              placeItems: "center",
+              zIndex: 4,
+            }}
+          >
+            <button type="button" className="btn btn-fill" onClick={() => setOpened(true)}>
               Open scrapbook
             </button>
           </div>
         )}
       </div>
+
       {opened && (
-        <button type="button" className="btn btn-ghost" style={{ marginTop: "1rem" }} onClick={reset}>
-          Close scrapbook
+        <button
+          type="button"
+          className="btn"
+          style={{ marginTop: "1rem" }}
+          onClick={reset}
+        >
+          Close
         </button>
       )}
     </section>
   );
 }
-

@@ -1,15 +1,39 @@
-﻿export default function GardenPanel() {
+export default function GardenPanel() {
   return (
     <section>
-      <h2>Plot â€” community garden</h2>
-      <p>
-        I was part of my city of <strong>Hendersonville</strong>&apos;s <strong>first community garden</strong>. It taught me patience: soil, seasons, and showing up for neighbors even when the weather
-        disagrees.
-      </p>
-      <p>
-        I will drop in photos and a longer story once you send assets â€” for now, this panel holds the narrative beat so the site structure is real.
-      </p>
-      <img src="/images/visual-garden.svg" alt="Stylized garden illustration placeholder" width={480} height={300} style={{ marginTop: "1.25rem", borderRadius: "var(--radius)", maxWidth: "100%", height: "auto" }} />
+      <h2>Community garden</h2>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "2rem",
+          flexWrap: "wrap",
+          alignItems: "flex-start",
+          marginTop: "1rem",
+        }}
+      >
+        <div className="polaroid tilt-slight" style={{ maxWidth: "240px" }}>
+          <img
+            src="/images/visual-garden.svg"
+            alt="Garden placeholder"
+            style={{ width: "100%", display: "block" }}
+          />
+          <p className="polaroid-caption">Hendersonville, TN</p>
+        </div>
+
+        <div style={{ flex: "1 1 300px" }}>
+          <p>
+            I was part of my city of <strong>Hendersonville's</strong>{" "}
+            <strong>first community garden</strong>. It taught me
+            patience: soil, seasons, and showing up for neighbors even
+            when the weather disagrees.
+          </p>
+          <p>
+            Drop in your own garden photos when ready — this spot holds
+            the story until then.
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
