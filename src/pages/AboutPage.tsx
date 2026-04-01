@@ -136,8 +136,6 @@ export default function AboutPage() {
                 <img
                   src={tile.image}
                   alt={tile.title}
-                  width={680}
-                  height={382}
                   loading="lazy"
                   decoding="async"
                   style={{ width: "100%", display: "block", borderRadius: "4px" }}
