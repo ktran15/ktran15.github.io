@@ -5,7 +5,7 @@ export default function BakingPanel() {
     <section>
       <h2>Baking</h2>
       <p>
-        I love baking — it's the perfect mix of precision and creativity.
+        I love baking &mdash; it's the perfect mix of precision and creativity.
         Here are some things I've made.
       </p>
 
@@ -23,8 +23,6 @@ export default function BakingPanel() {
               <img
                 src={r.image}
                 alt={r.title}
-                width={240}
-                height={200}
                 loading="lazy"
                 decoding="async"
                 style={{

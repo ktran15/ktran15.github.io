@@ -1,6 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+import { useState, useRef } from "react";
 
 const photos = [
   { src: "/images/scrapbook/DSCF2097.jpg", caption: "Venice, Grand Canal" },
@@ -50,26 +48,21 @@ const totalPages = Math.ceil(photos.length / PER_PAGE);
 const tilts = ["tilt-left", "tilt-right", ""];
 
 export default function ScrapbookPanel() {
-  const wrap = useRef<HTMLDivElement>(null);
-  const cover = useRef<HTMLDivElement>(null);
   const [opened, setOpened] = useState(false);
+  const [coverFlipped, setCoverFlipped] = useState(false);
   const [page, setPage] = useState(0);
-  const reduced = usePrefersReducedMotion();
+  const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  useLayoutEffect(() => {
-    if (!opened || reduced || !cover.current) return;
-    const ctx = gsap.context(() => {
-      gsap.to(cover.current, { opacity: 0, duration: 0.6, ease: "power2.inOut" });
-    }, wrap);
-    return () => ctx.revert();
-  }, [opened, reduced]);
+  const handleOpen = () => {
+    if (coverFlipped) return;
+    setCoverFlipped(true);
+    timerRef.current = setTimeout(() => setOpened(true), 950);
+  };
 
-  const reset = () => {
-    if (cover.current) {
-      gsap.set(cover.current, { opacity: 1 });
-    }
+  const handleClose = () => {
     setOpened(false);
     setPage(0);
+    setTimeout(() => setCoverFlipped(false), 50);
   };
 
   const pagePhotos = photos.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
@@ -87,8 +80,6 @@ export default function ScrapbookPanel() {
         <img
           src="/images/camera-keith.jpg"
           alt="Keith with camera"
-          width={140}
-          height={140}
           loading="lazy"
           decoding="async"
           style={{
@@ -102,173 +93,266 @@ export default function ScrapbookPanel() {
         />
       </div>
 
-      <div
-        ref={wrap}
-        style={{
-          position: "relative",
-          marginTop: "1.5rem",
-          overflow: "hidden",
-          minHeight: "440px",
-          background: "linear-gradient(135deg, #faf6f0 0%, #f3ece2 100%)",
-          boxShadow: "4px 4px 20px rgba(42,37,34,0.15), -1px 0 6px rgba(42,37,34,0.06)",
-          borderRadius: "6px",
-          border: "1px solid rgba(42,37,34,0.1)",
-        }}
-      >
-        {/* Book spine accent */}
+      <style>{`
+        .book-container {
+          perspective: 1400px;
+          width: min(620px, 92vw);
+          height: min(440px, 70vw);
+          cursor: pointer;
+          position: relative;
+          margin: 1.5rem auto 0;
+        }
+        .book-base {
+          position: absolute; inset: 0;
+          border-radius: 8px 18px 18px 8px;
+          background: #7B3F1E;
+          border: 4px solid #1a1a1a;
+          box-shadow: 8px 8px 0 #1a1a1a;
+        }
+        .pages-stack {
+          position: absolute;
+          top: 6px; left: 12px; right: -2px; bottom: 6px;
+          border-radius: 4px 14px 14px 4px;
+          background: repeating-linear-gradient(to bottom, #fdefc3 0px, #fdefc3 18px, #f5e0a0 18px, #f5e0a0 19px);
+          border: 3px solid #1a1a1a;
+        }
+        .book-front {
+          position: absolute; inset: 0;
+          border-radius: 8px 18px 18px 8px;
+          background: #A0522D;
+          border: 4px solid #1a1a1a;
+          transform-origin: left center;
+          transform-style: preserve-3d;
+          transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+          will-change: transform;
+          backface-visibility: hidden;
+        }
+        .book-front.flipped { transform: rotateY(-165deg); }
+        .book-front::before {
+          content: ''; position: absolute; inset: 8px;
+          border-radius: 4px 14px 14px 4px;
+          border: 2px solid rgba(0,0,0,0.18);
+        }
+        .book-spine {
+          position: absolute;
+          top: 4px; bottom: 4px; left: -14px; width: 20px;
+          background: #7B3F1E;
+          border-radius: 4px 0 0 4px;
+          border: 4px solid #1a1a1a;
+          border-right: none;
+        }
+        .book-strap {
+          position: absolute;
+          top: 50%; right: -8px; transform: translateY(-50%);
+          width: 70px; height: 10px;
+          background: var(--rust, #b85c38);
+          border: 3px solid #1a1a1a;
+          border-radius: 3px;
+          transition: opacity 0.4s;
+        }
+        .book-front.flipped ~ .book-strap { opacity: 0; }
+        .scratch {
+          position: absolute;
+          background: rgba(0,0,0,0.12);
+          border-radius: 2px;
+          pointer-events: none;
+        }
+        .sticker {
+          position: absolute;
+          filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3));
+          pointer-events: none;
+        }
+        .cover-title {
+          position: absolute;
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+          text-align: center;
+          pointer-events: none;
+        }
+        .cover-title h3 {
+          font-family: var(--font-display, 'Playfair Display', serif);
+          font-size: 1.8rem;
+          color: var(--gold, #B3A369);
+          text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+          line-height: 1.1;
+          margin: 0;
+        }
+        .cover-title p {
+          font-family: var(--font-body, 'Source Sans 3', sans-serif);
+          font-size: 0.7rem; font-weight: 600;
+          color: rgba(255,255,255,0.6);
+          margin-top: 6px; letter-spacing: 1px;
+        }
+        .washi {
+          position: absolute; pointer-events: none;
+          border: 1px solid rgba(0,0,0,0.08);
+        }
+        .open-hint {
+          text-align: center; margin-top: 12px;
+          font-family: var(--font-display, serif);
+          font-style: italic;
+          font-size: 0.9rem; color: var(--ink-light, #888);
+          letter-spacing: 1px;
+          animation: hintBounce 1.4s infinite;
+        }
+        @keyframes hintBounce {
+          0%,100% { transform: translateY(0); }
+          50% { transform: translateY(5px); }
+        }
+        @keyframes scFadeIn {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: none; }
+        }
+      `}</style>
+
+      {!opened && (
+        <>
+          <div className="book-container" onClick={handleOpen} title="Click to open">
+            <div className="book-base" />
+            <div className="pages-stack" />
+            <div className="book-spine" />
+            <div className={`book-front${coverFlipped ? " flipped" : ""}`}>
+              <div className="scratch" style={{ width: 60, height: 3, top: 30, left: 40, transform: "rotate(-8deg)" }} />
+              <div className="scratch" style={{ width: 35, height: 2, top: 38, left: 48, transform: "rotate(3deg)" }} />
+              <div className="scratch" style={{ width: 80, height: 2, bottom: 45, right: 30, transform: "rotate(4deg)" }} />
+              <div className="sticker" style={{ top: 16, right: 24, transform: "rotate(12deg)", fontSize: "1.8rem" }}>🗺️</div>
+              <div className="sticker" style={{ bottom: 22, left: 20, transform: "rotate(-14deg)", fontSize: "2rem" }}>✈️</div>
+              <div className="sticker" style={{ bottom: 30, right: 28, transform: "rotate(8deg)", fontSize: "1.4rem" }}>📷</div>
+              <div className="washi" style={{ top: 0, left: 40, width: 80, height: 16, background: "rgba(179,163,105,0.4)", transform: "rotate(-3deg)" }} />
+              <div className="washi" style={{ bottom: 0, right: 50, width: 60, height: 16, background: "rgba(184,92,56,0.35)", transform: "rotate(4deg)" }} />
+              <div className="cover-title">
+                <h3>MY<br />SCRAP<br />BOOK</h3>
+                <p>KEITH TRAN</p>
+              </div>
+            </div>
+            <div className="book-strap" />
+          </div>
+          {!coverFlipped && <div className="open-hint">click to open</div>}
+        </>
+      )}
+
+      {opened && (
         <div
           style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: "18px",
-            background: "linear-gradient(90deg, rgba(42,37,34,0.08), transparent)",
-            zIndex: 1,
-            borderRadius: "6px 0 0 6px",
+            position: "relative",
+            marginTop: "1.5rem",
+            overflow: "hidden",
+            minHeight: "440px",
+            background: "linear-gradient(135deg, #faf6f0 0%, #f3ece2 100%)",
+            boxShadow: "4px 4px 20px rgba(42,37,34,0.15), -1px 0 6px rgba(42,37,34,0.06)",
+            borderRadius: "6px",
+            border: "1px solid rgba(42,37,34,0.1)",
+            animation: "scFadeIn 0.5s ease",
           }}
-        />
-
-        {/* Page content */}
-        <div style={{ padding: "2rem 2rem 1.5rem 2.5rem", position: "relative", zIndex: 1 }}>
-          {opened && (
-            <>
-              <div style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "1.25rem",
-                paddingBottom: "0.75rem",
-                borderBottom: "1px dashed var(--ink-faint, #ccc)",
-              }}>
-                <span style={{
-                  fontFamily: "var(--font-display)",
-                  fontStyle: "italic",
-                  fontSize: "0.95rem",
-                  color: "var(--ink-light)",
-                }}>
-                  Page {page + 1} of {totalPages}
-                </span>
-                <span style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "0.85rem",
-                  color: "var(--ink-faint, #aaa)",
-                }}>
-                  Keith's Scrapbook
-                </span>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-                  gap: "1.25rem",
-                }}
-              >
-                {pagePhotos.map((photo, i) => (
-                  <div
-                    key={photo.src}
-                    className={`polaroid ${tilts[i % tilts.length]}`}
-                  >
-                    <img
-                      src={photo.src}
-                      alt={photo.caption}
-                      width={320}
-                      height={213}
-                      loading="lazy"
-                      decoding="async"
-                      style={{ width: "100%", display: "block" }}
-                    />
-                    <p className="polaroid-caption">{photo.caption}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "1rem",
-                marginTop: "1.5rem",
-                paddingTop: "0.75rem",
-                borderTop: "1px dashed var(--ink-faint, #ccc)",
-              }}>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => setPage((p) => Math.max(0, p - 1))}
-                  disabled={page === 0}
-                  style={{ opacity: page === 0 ? 0.4 : 1 }}
-                >
-                  &larr; Prev
-                </button>
-                <span style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "0.9rem",
-                  color: "var(--ink-light)",
-                  minWidth: "80px",
-                  textAlign: "center",
-                }}>
-                  {page + 1} / {totalPages}
-                </span>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                  disabled={page === totalPages - 1}
-                  style={{ opacity: page === totalPages - 1 ? 0.4 : 1 }}
-                >
-                  Next &rarr;
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Single clean cover overlay */}
-        {!opened && (
+        >
+          {/* Book spine accent */}
           <div
-            ref={cover}
             style={{
               position: "absolute",
-              inset: 0,
-              zIndex: 6,
-              background: "linear-gradient(135deg, #d4c4a8 0%, #c9b896 50%, #bfae88 100%)",
-              borderRadius: "6px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "1.5rem",
+              left: 0, top: 0, bottom: 0, width: "18px",
+              background: "linear-gradient(90deg, rgba(42,37,34,0.08), transparent)",
+              zIndex: 1,
+              borderRadius: "6px 0 0 6px",
             }}
-          >
-            <span style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "1.8rem",
-              fontStyle: "italic",
-              color: "#5a4e3a",
-              textAlign: "center",
+          />
+
+          <div style={{ padding: "2rem 2rem 1.5rem 2.5rem", position: "relative", zIndex: 1 }}>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1.25rem",
+              paddingBottom: "0.75rem",
+              borderBottom: "1px dashed var(--ink-faint, #ccc)",
             }}>
-              My Scrapbook
-            </span>
-            <button
-              type="button"
-              className="btn btn-fill"
-              style={{ fontSize: "1.05rem", padding: "0.7rem 1.6rem" }}
-              onClick={() => setOpened(true)}
+              <span style={{
+                fontFamily: "var(--font-display)",
+                fontStyle: "italic",
+                fontSize: "0.95rem",
+                color: "var(--ink-light)",
+              }}>
+                Page {page + 1} of {totalPages}
+              </span>
+              <span style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "0.85rem",
+                color: "var(--ink-faint, #aaa)",
+              }}>
+                Keith's Scrapbook
+              </span>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+                gap: "1.25rem",
+              }}
             >
-              Open scrapbook
-            </button>
+              {pagePhotos.map((photo, i) => (
+                <div
+                  key={photo.src}
+                  className={`polaroid ${tilts[i % tilts.length]}`}
+                >
+                  <img
+                    src={photo.src}
+                    alt={photo.caption}
+                    loading="lazy"
+                    decoding="async"
+                    style={{ width: "100%", display: "block" }}
+                  />
+                  <p className="polaroid-caption">{photo.caption}</p>
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1rem",
+              marginTop: "1.5rem",
+              paddingTop: "0.75rem",
+              borderTop: "1px dashed var(--ink-faint, #ccc)",
+            }}>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0}
+                style={{ opacity: page === 0 ? 0.4 : 1 }}
+              >
+                &larr; Prev
+              </button>
+              <span style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "0.9rem",
+                color: "var(--ink-light)",
+                minWidth: "80px",
+                textAlign: "center",
+              }}>
+                {page + 1} / {totalPages}
+              </span>
+              <button
+                type="button"
+                className="btn"
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                disabled={page === totalPages - 1}
+                style={{ opacity: page === totalPages - 1 ? 0.4 : 1 }}
+              >
+                Next &rarr;
+              </button>
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {opened && (
         <button
           type="button"
           className="btn"
           style={{ marginTop: "1rem" }}
-          onClick={reset}
+          onClick={handleClose}
         >
           Close scrapbook
         </button>
