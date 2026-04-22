@@ -1,3 +1,17 @@
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+};
+
+export type ProjectSection = {
+  id: string;
+  heading: string;
+  paragraphs: string[];
+  images?: ProjectImage[];
+  bullets?: string[];
+};
+
 export type Project = {
   slug: string;
   title: string;
@@ -5,7 +19,7 @@ export type Project = {
   role: string;
   stack: string[];
   coverImage: string;
-  body: string;
+  sections: ProjectSection[];
   gallery: string[];
   videoUrl?: string;
 };
@@ -14,32 +28,104 @@ export const projects: Project[] = [
   {
     slug: "piano-led-visualizer",
     title: "Piano Audio-Reactive LED Visualization",
-    tagline: "Turning every note into a real-time light show driven by microcontroller signal processing.",
-    role: "Discovery Project",
+    tagline:
+      "A strip of LEDs that reacts in real time to my piano, where pitch drives color and velocity drives brightness.",
+    role: "ECE 1100 Discovery Project",
     stack: [
-      "Embedded C",
-      "Microcontrollers",
-      "Signal Processing",
-      "Analog Circuits",
-      "FFT",
-      "PWM",
-      "SPI",
-      "MIDI",
-      "LED Matrix",
+      "Python",
+      "Raspberry Pi 4",
+      "WS2812B (ws281x)",
+      "mido (MIDI)",
+      "NumPy",
+      "Adafruit NeoPixel",
+      "Linux",
+      "GPIO",
+      "Soldering",
     ],
-    coverImage: "/images/visual-project-a.svg",
-    gallery: ["/images/visual-project-a.svg"],
-    body: `The idea behind this project is deceptively simple: play a note on the piano and watch a strip of LEDs respond in real time, painting color across a room in sync with every chord, run, and rest. What makes the project genuinely interesting is the engineering hiding behind that experience. Bridging the gap between an acoustic instrument and a programmable light display demands careful thinking about analog signal capture, digital signal processing on a resource-constrained microcontroller, and precise timing so the visuals never feel late.
-
-Audio capture is the first challenge. The system supports two input paths. A small electret microphone paired with a pre-amplifier circuit picks up the acoustic output of the piano, while an optional MIDI breakout board can tap the digital note data directly from instruments that support it. The microphone path is the more demanding one: the raw analog signal needs conditioning through a bandpass filter to reject noise outside the musical range, followed by analog-to-digital conversion at a sample rate high enough to resolve individual notes across the keyboard. Designing and tuning that analog front-end taught me more about op-amp biasing, decoupling, and ground routing than any textbook exercise.
-
-Once the signal is digitized, the microcontroller performs real-time frequency analysis. A lightweight FFT running on the MCU decomposes each audio frame into frequency bins, letting the firmware identify which notes are currently active and how loud they are. Mapping those bins to LED colors is where the creative decisions live: lower notes might glow warm amber while upper-register trills flash cool blue, and the brightness tracks the volume envelope so soft passages dim and fortissimo chords saturate the strip. Keeping this pipeline within the MCU's cycle budget is a constant exercise in profiling and trade-offs — choosing a smaller FFT window for lower latency versus a larger one for better frequency resolution, and deciding where fixed-point arithmetic can replace floating-point without visible artifacts.
-
-Driving the LED hardware introduces its own constraints. The system uses addressable RGB LEDs controlled over a single-wire protocol that demands precise sub-microsecond timing. The firmware generates the data stream using a combination of hardware timers and DMA transfers so the CPU stays free to continue processing the next audio frame. For larger installations with LED matrices instead of strips, an SPI-based driver handles the higher data throughput. Power management matters too: a full strip at maximum brightness can draw several amps, so the board includes current-sense feedback and a soft brightness cap to protect the supply.
-
-From an ECE perspective, this project ties together skills I have been developing across my coursework: analog-to-digital conversion, discrete-time signal processing, embedded firmware with hard real-time deadlines, communication protocols like SPI and single-wire interfaces, and PWM-based power control. It also forced me to practice system-level thinking — a beautiful FFT result is useless if the LED update latency makes the lights feel sluggish, and a fast LED driver is pointless if the audio front-end clips on loud passages.
-
-Next steps include adding a small OLED display for live spectrum visualization, implementing beat detection so the lights can pulse with rhythmic patterns, and packaging the hardware into a clean enclosure that sits on top of an upright piano. I also want to document the build with detailed schematics, annotated firmware, and a short demo video so other students can adapt the design for their own instruments or performances.`,
+    coverImage: "/images/piano/piano-setup-desk.png",
+    sections: [
+      {
+        id: "problem",
+        heading: "The Problem",
+        paragraphs: [
+          "I have always found reactive light displays mesmerizing, especially the kind that respond to sound, film, or music. After seeing a more ambitious water and light installation online, I started wondering what a more personal version could look like, something tied to the instrument I actually play. That became the seed of this project: a strip of LEDs that reacts in real time to my piano, where every key maps to its own pixel, pitch drives color, and velocity drives brightness. Soft passages dim, fortissimo chords saturate the strip, and each performance gains an extra layer of dynamics the audience can see, not just hear.",
+          "Framing it that way turned a vague idea into a real engineering problem. I needed a reliable way to pull note data off the piano in real time, translate it into color and brightness with low enough latency to feel musical, and drive enough LEDs to span the full length of the keyboard without fighting power, timing, or flicker.",
+        ],
+        images: [
+          {
+            src: "/images/piano/piano-setup-desk.png",
+            alt: "Roland FP-10 piano next to a Raspberry Pi wired up on a wooden desk",
+            caption: "The instrument I wanted to visualize, next to the Pi that would drive it.",
+          },
+        ],
+      },
+      {
+        id: "process",
+        heading: "The Process",
+        paragraphs: [
+          "My first step was research and planning. I sketched the full signal path from instrument to LED and figured out where the hard parts would live. My Roland FP-10 supports Bluetooth MIDI, so I originally planned to capture the signal wirelessly, decode it into note and velocity data, and push colors out to the strip. I mapped out voltage levels, current budgets, and part compatibility, then ordered components from Amazon and picked up a Raspberry Pi 4 from the Micro Center near me.",
+          "Bluetooth MIDI on Linux turned out to be more fragile than the tutorials suggested. After too many pairing issues and dropped connections, I pivoted to a wired USB link using the mido library in Python. That gave me clean, consistent note events and let me focus on the rest of the pipeline. I flashed Raspberry Pi OS, set up the environment, and wrote the control script. mido listens for note_on, note_off, and control_change messages, a small mapping function translates MIDI pitch into an LED index and a color, and numpy.interp scales velocity from the MIDI range (0 to 127) into LED brightness (0 to 255). A dedicated thread handles the sustain pedal so notes fade out gracefully when a key lifts instead of cutting off hard.",
+          "The first real milestone came when the terminal started printing live pitch and velocity as I played. That was the moment the project stopped feeling like a thought experiment and started feeling like something I could actually finish.",
+          "From there, most of the road blocks have lived on the hardware side. The strip is a pair of WS2812B (ws281x) segments I am soldering end to end so the lit portion matches the length of the keyboard. Because the strip pulls far more current than the Pi can safely supply, I added an AC to DC power brick with a dedicated 5V rail, tied the grounds together, and run the data line off a GPIO pin through the Adafruit NeoPixel library. Wiring has been the messiest part of the build so far, and getting every segment to boot cleanly without voltage sag has been a steady exercise in patience.",
+        ],
+        images: [
+          {
+            src: "/images/piano/piano-console-notes.png",
+            alt: "Terminal output showing live MIDI Note On messages with pitch and velocity values",
+            caption: "First successful run: live MIDI note and velocity data streaming from the piano.",
+          },
+          {
+            src: "/images/piano/piano-code.png",
+            alt: "Close-up of the Main.py control script in VS Code, showing the MIDI event loop",
+            caption: "The control script in VS Code, handling note_on, note_off, and control_change events.",
+          },
+          {
+            src: "/images/piano/piano-dev-setup.png",
+            alt: "Monitor showing the Main.py file open in Geany next to a terminal installing Python packages on the Raspberry Pi",
+            caption: "Raspberry Pi OS with the project environment set up and mido talking to the piano.",
+          },
+        ],
+      },
+      {
+        id: "outcome",
+        heading: "The Outcome (WIP)",
+        paragraphs: [
+          "The software side is effectively finished. The control script connects to the piano, parses MIDI in real time, converts pitch and velocity into color and brightness, and stages each update against the LED buffer. The one function still waiting on final hardware integration is the LED write path itself, which needs the fully soldered strip and a stable power rail to be validated under real load.",
+          "Honestly, I bit off more than I could reasonably finish in a single semester, but the project is very much alive. The plan is to finish the soldering, clean up the wiring into something worth photographing, and run a proper end to end demo with a recorded performance. Longer term, I want to build a small enclosure for the Pi and power rail, add a chord-aware color mode, and experiment with a pedal-driven shimmer effect on sustained notes.",
+        ],
+        images: [
+          {
+            src: "/images/piano/piano-pi-leds.png",
+            alt: "Raspberry Pi 4 wired to a WS2812B LED strip with power and data lines taped to the desk",
+            caption: "The current hardware state: Pi, addressable strip, and external 5V supply sharing a ground.",
+          },
+        ],
+      },
+      {
+        id: "ece-skills",
+        heading: "ECE Skills Gained",
+        paragraphs: [
+          "This project forced me to stitch together software, firmware-adjacent scripting, and real hardware into one working system. The list below captures what I actually practiced along the way, not just what I read about.",
+        ],
+        bullets: [
+          "Real-time event handling in Python using the mido library for note_on, note_off, and control_change MIDI messages.",
+          "Numerical mapping of pitch to color and velocity to brightness with numpy.interp to get smooth, continuous response.",
+          "Hardware interfacing with WS2812B (ws281x) addressable LEDs through the Adafruit NeoPixel library.",
+          "Raspberry Pi OS on a Pi 4, including flashing, USB device management, and building a reproducible Python environment.",
+          "Power electronics basics: current budgeting, AC to DC supply selection, and shared ground practice between the Pi and the LED rail.",
+          "Soldering, wiring, and full-system integration between a consumer instrument, a single-board computer, and LED hardware.",
+          "Engineering trade-off analysis, most visibly the pivot from Bluetooth MIDI to a wired USB connection for reliability.",
+        ],
+      },
+    ],
+    gallery: [
+      "/images/piano/piano-overview.png",
+      "/images/piano/piano-setup-desk.png",
+      "/images/piano/piano-dev-setup.png",
+      "/images/piano/piano-console-notes.png",
+      "/images/piano/piano-code.png",
+      "/images/piano/piano-pi-leds.png",
+    ],
   },
 ];
 

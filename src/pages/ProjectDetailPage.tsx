@@ -1,5 +1,21 @@
 import { Link, useParams } from "react-router-dom";
-import { getProjectBySlug } from "../content/projects";
+import { getProjectBySlug, type ProjectImage } from "../content/projects";
+
+function SectionFigure({ img, rotate }: { img: ProjectImage; rotate: string }) {
+  return (
+    <figure
+      className="polaroid"
+      style={{
+        transform: `rotate(${rotate})`,
+        margin: 0,
+        maxWidth: "100%",
+      }}
+    >
+      <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />
+      {img.caption && <figcaption className="polaroid-caption">{img.caption}</figcaption>}
+    </figure>
+  );
+}
 
 export default function ProjectDetailPage() {
   const { slug } = useParams();
@@ -14,11 +30,9 @@ export default function ProjectDetailPage() {
     );
   }
 
-  const paras = p.body.split(/\n\n+/).filter(Boolean);
-
   return (
     <article>
-      <p className="section-label">Case study</p>
+      <p className="section-label">Discovery Project</p>
       <h1>{p.title}</h1>
       <p className="lead">{p.tagline}</p>
 
@@ -28,7 +42,9 @@ export default function ProjectDetailPage() {
         </p>
         <div className="tags">
           {p.stack.map((s) => (
-            <span key={s} className="tag">{s}</span>
+            <span key={s} className="tag">
+              {s}
+            </span>
           ))}
         </div>
       </div>
@@ -58,32 +74,94 @@ export default function ProjectDetailPage() {
         </div>
       )}
 
-      {paras.map((para) => (
-        <p key={para.slice(0, 30)}>{para}</p>
-      ))}
+      {p.sections.map((section, sIdx) => {
+        const hasImages = section.images && section.images.length > 0;
+        const textColumn = (
+          <div>
+            {section.paragraphs.map((para, idx) => (
+              <p key={idx}>{para}</p>
+            ))}
+            {section.bullets && section.bullets.length > 0 && (
+              <ul style={{ paddingLeft: "1.1rem", margin: "0.5rem 0 0" }}>
+                {section.bullets.map((b, idx) => (
+                  <li key={idx} style={{ marginBottom: "0.4rem" }}>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
 
-      <h2>Gallery</h2>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "1.5rem",
-          marginTop: "1rem",
-        }}
-      >
-        {p.gallery.map((src, i) => (
+        return (
+          <section
+            key={section.id}
+            id={section.id}
+            style={{ marginTop: sIdx === 0 ? "1rem" : "2.5rem" }}
+          >
+            <h2 style={{ marginBottom: "0.75rem" }}>{section.heading}</h2>
+            {hasImages ? (
+              <div
+                style={{
+                  display: "grid",
+                  gap: "1.75rem",
+                  gridTemplateColumns: "minmax(0, 1fr) minmax(0, 280px)",
+                  alignItems: "start",
+                }}
+                className="project-section-grid"
+              >
+                {textColumn}
+                <aside
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1.25rem",
+                    position: "sticky",
+                    top: "1.5rem",
+                  }}
+                >
+                  {section.images!.map((img, idx) => (
+                    <SectionFigure
+                      key={img.src}
+                      img={img}
+                      rotate={idx % 2 === 0 ? "-1.2deg" : "1.6deg"}
+                    />
+                  ))}
+                </aside>
+              </div>
+            ) : (
+              textColumn
+            )}
+          </section>
+        );
+      })}
+
+      {p.gallery.length > 0 && (
+        <>
+          <h2 style={{ marginTop: "3rem" }}>Gallery</h2>
           <div
-            key={src}
-            className="polaroid"
             style={{
-              maxWidth: "280px",
-              transform: `rotate(${i % 2 === 0 ? "-1.5" : "2"}deg)`,
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "1.5rem",
+              marginTop: "1rem",
             }}
           >
-            <img src={src} alt="Project photo" />
+            {p.gallery.map((src, i) => (
+              <div
+                key={src}
+                className="polaroid"
+                style={{
+                  maxWidth: "260px",
+                  transform: `rotate(${i % 2 === 0 ? "-1.5" : "2"}deg)`,
+                }}
+              >
+                <img src={src} alt="Project photo" loading="lazy" decoding="async" />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       <div style={{ marginTop: "2.5rem" }}>
         <Link className="btn" to="/projects">
