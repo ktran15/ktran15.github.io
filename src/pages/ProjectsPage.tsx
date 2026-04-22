@@ -6,8 +6,7 @@ export default function ProjectsPage() {
     <div>
       <h1>Projects</h1>
       <p className="lead">
-        Problem, constraints, what I built, and what I'd do
-        next — written for humans, not buzzwords.
+        Problem, constraints, what I built, and what I would do next.
       </p>
 
       <div className="two-col" style={{ marginTop: "2rem" }}>
@@ -21,11 +20,16 @@ export default function ProjectsPage() {
             <img
               src={p.coverImage}
               alt=""
+              loading="lazy"
+              decoding="async"
               style={{
                 width: "100%",
-                height: "auto",
+                height: "200px",
+                objectFit: "cover",
+                objectPosition: "center",
                 borderRadius: "3px",
                 marginBottom: "1rem",
+                display: "block",
               }}
             />
             <h2 style={{ margin: "0 0 0.35rem", fontSize: "1.3rem" }}>
