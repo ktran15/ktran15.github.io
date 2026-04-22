@@ -15,9 +15,9 @@ function SectionFigure({
       className="polaroid"
       style={{
         float: "right",
-        clear: clear ?? "none",
-        width: "220px",
-        maxWidth: "45%",
+        clear: clear ?? "right",
+        width: "260px",
+        maxWidth: "50%",
         margin: "0 0 1.25rem 1.5rem",
         transform: `rotate(${rotate})`,
       }}
@@ -98,7 +98,7 @@ export default function ProjectDetailPage() {
               key={img.src}
               img={img}
               rotate={idx % 2 === 0 ? "-1.2deg" : "1.6deg"}
-              clear={idx === 0 ? "right" : "none"}
+              clear="right"
             />
           ))}
 
