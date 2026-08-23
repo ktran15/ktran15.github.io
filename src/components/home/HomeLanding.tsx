@@ -5,16 +5,14 @@ const chapters = [
   { to: "/about", label: "About me" },
   { to: "/projects", label: "Projects" },
   { to: "/play/scrapbook", label: "Hobbies" },
-  { to: "/blog", label: "Blog" },
+  { to: "/resume", label: "Resume" },
 ];
 
 export default function HomeLanding() {
   return (
     <div>
       <div style={{ maxWidth: "640px" }}>
-        <h1>
-          Hi, I'm Keith.
-        </h1>
+        <h1>Hi, I'm Keith.</h1>
         <p className="lead">
           Computer Engineering student at Georgia Tech. I build systems
           that bridge hardware and software, and I care about the
@@ -22,15 +20,7 @@ export default function HomeLanding() {
         </p>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
-          gap: "2.5rem",
-          alignItems: "start",
-          marginTop: "2.5rem",
-        }}
-      >
+      <div className="home-hero">
         <div>
           <ul style={{ paddingLeft: "1.2rem", margin: 0, maxWidth: "54ch" }}>
             {welcomeBullets.map((b) => (
@@ -52,29 +42,18 @@ export default function HomeLanding() {
           </nav>
         </div>
 
-        <div
-          className="polaroid tilt-right hide-mobile"
-          style={{ maxWidth: "220px" }}
-        >
+        <div className="polaroid tilt-right home-hero-portrait">
           <img
             src="/images/headshot.png"
             alt="Photo of Keith Tran"
             width={200}
-            height={200}
+            height={300}
             fetchPriority="high"
             decoding="async"
             style={{ width: "100%", height: "auto", display: "block" }}
           />
         </div>
       </div>
-
-      <style>{`
-        @media (max-width: 700px) {
-          div[style*="grid-template-columns: 1fr auto"] {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

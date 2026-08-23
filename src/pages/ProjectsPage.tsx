@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { projects } from "../content/projects";
+import StatusStamp from "../components/projects/StatusStamp";
 
 export default function ProjectsPage() {
   return (
@@ -34,6 +35,7 @@ export default function ProjectsPage() {
             />
             <h2 style={{ margin: "0 0 0.35rem", fontSize: "1.3rem" }}>
               {p.title}
+              <StatusStamp status={p.status} />
             </h2>
             <p style={{ margin: "0 0 0.75rem", color: "var(--ink-light)" }}>
               {p.tagline}

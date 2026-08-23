@@ -11,8 +11,6 @@ const ScrapbookPanel = lazy(() => import("./pages/ScrapbookPanel"));
 const PianoPanel = lazy(() => import("./pages/PianoPanel"));
 const GardenPanel = lazy(() => import("./pages/GardenPanel"));
 const BakingPanel = lazy(() => import("./pages/BakingPanel"));
-const WritingPage = lazy(() => import("./pages/WritingPage"));
-const PostPage = lazy(() => import("./pages/PostPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const ResumePage = lazy(() => import("./pages/ResumePage"));
 
@@ -32,8 +30,6 @@ export default function App() {
             <Route path="garden" element={<GardenPanel />} />
             <Route path="baking" element={<BakingPanel />} />
           </Route>
-          <Route path="blog" element={<WritingPage />} />
-          <Route path="blog/:slug" element={<PostPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="resume" element={<ResumePage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

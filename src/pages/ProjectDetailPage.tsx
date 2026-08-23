@@ -1,5 +1,7 @@
+import { Fragment } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getProjectBySlug, type ProjectImage } from "../content/projects";
+import StatusStamp from "../components/projects/StatusStamp";
 
 function SectionFigure({
   img,
@@ -10,15 +12,26 @@ function SectionFigure({
   rotate: string;
   clear?: "right" | "none";
 }) {
+  const wideStyle = {
+    clear: "both" as const,
+    display: "block",
+    width: "min(560px, 100%)",
+    margin: "0 auto 1.75rem",
+  };
+
+  const floatStyle = {
+    float: "right" as const,
+    clear: clear ?? ("right" as const),
+    width: "260px",
+    maxWidth: "50%",
+    margin: "0 0 1.25rem 1.5rem",
+  };
+
   return (
     <figure
-      className="polaroid"
+      className={`polaroid${img.wide ? " figure-wide" : ""}`}
       style={{
-        float: "right",
-        clear: clear ?? "right",
-        width: "260px",
-        maxWidth: "50%",
-        margin: "0 0 1.25rem 1.5rem",
+        ...(img.wide ? wideStyle : floatStyle),
         transform: `rotate(${rotate})`,
       }}
     >
@@ -44,7 +57,10 @@ export default function ProjectDetailPage() {
   return (
     <article>
       <p className="section-label">Discovery Project</p>
-      <h1>{p.title}</h1>
+      <h1>
+        {p.title}
+        <StatusStamp status={p.status} />
+      </h1>
       <p className="lead">{p.tagline}</p>
 
       <div style={{ marginTop: "1rem", marginBottom: "1.5rem" }}>
@@ -58,6 +74,31 @@ export default function ProjectDetailPage() {
             </span>
           ))}
         </div>
+
+        {(p.demoUrl || p.repoUrl) && (
+          <div className="project-actions">
+            {p.demoUrl && (
+              <a
+                className="btn btn-fill"
+                href={p.demoUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Watch the demo
+              </a>
+            )}
+            {p.repoUrl && (
+              <a
+                className="btn"
+                href={p.repoUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View the code
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
       <hr className="wavy-rule" />
@@ -85,40 +126,68 @@ export default function ProjectDetailPage() {
         </div>
       )}
 
-      {p.sections.map((section, sIdx) => (
-        <section
-          key={section.id}
-          id={section.id}
-          style={{ marginTop: sIdx === 0 ? "1rem" : "2.25rem" }}
-        >
-          <h2 style={{ marginBottom: "0.75rem", clear: "both" }}>{section.heading}</h2>
+      {p.sections.map((section, sIdx) => {
+        const images = section.images ?? [];
+        const wideImages = images.filter((img) => img.wide);
+        const floatImages = images.filter((img) => !img.wide);
+        const paragraphs = section.paragraphs;
 
-          {section.images?.map((img, idx) => (
-            <SectionFigure
-              key={img.src}
-              img={img}
-              rotate={idx % 2 === 0 ? "-1.2deg" : "1.6deg"}
-              clear="right"
-            />
-          ))}
+        // A float only starts where it is declared, so declaring them all up
+        // front packs them into the first screenful. Spread them evenly down
+        // the paragraphs instead, so the side column stays populated to the
+        // end of the section.
+        const slots = new Map<number, ProjectImage[]>();
+        floatImages.forEach((img, idx) => {
+          const slot = Math.min(
+            Math.round((idx * paragraphs.length) / floatImages.length),
+            Math.max(paragraphs.length - 1, 0)
+          );
+          slots.set(slot, [...(slots.get(slot) ?? []), img]);
+        });
 
-          {section.paragraphs.map((para, idx) => (
-            <p key={idx}>{para}</p>
-          ))}
+        const rotateFor = (img: ProjectImage) =>
+          floatImages.indexOf(img) % 2 === 0 ? "-1.2deg" : "1.6deg";
 
-          {section.bullets && section.bullets.length > 0 && (
-            <ul style={{ paddingLeft: "1.1rem", margin: "0.5rem 0 0" }}>
-              {section.bullets.map((b, idx) => (
-                <li key={idx} style={{ marginBottom: "0.4rem" }}>
-                  {b}
-                </li>
-              ))}
-            </ul>
-          )}
+        return (
+          <section
+            key={section.id}
+            id={section.id}
+            style={{ marginTop: sIdx === 0 ? "1rem" : "2.25rem" }}
+          >
+            <h2 style={{ marginBottom: "0.75rem", clear: "both" }}>{section.heading}</h2>
 
-          <div style={{ clear: "both" }} />
-        </section>
-      ))}
+            {wideImages.map((img) => (
+              <SectionFigure key={img.src} img={img} rotate="-1.2deg" />
+            ))}
+
+            {paragraphs.map((para, idx) => (
+              <Fragment key={idx}>
+                {(slots.get(idx) ?? []).map((img) => (
+                  <SectionFigure
+                    key={img.src}
+                    img={img}
+                    rotate={rotateFor(img)}
+                    clear="right"
+                  />
+                ))}
+                <p>{para}</p>
+              </Fragment>
+            ))}
+
+            {section.bullets && section.bullets.length > 0 && (
+              <ul style={{ paddingLeft: "1.1rem", margin: "0.5rem 0 0" }}>
+                {section.bullets.map((b, idx) => (
+                  <li key={idx} style={{ marginBottom: "0.4rem" }}>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div style={{ clear: "both" }} />
+          </section>
+        );
+      })}
 
       {p.gallery.length > 0 && (
         <>

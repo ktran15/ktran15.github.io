@@ -33,6 +33,7 @@ body,
 
 body {
   margin: 0;
+  overflow-x: hidden;
   font-family: var(--font-body);
   font-size: 1.05rem;
   background: var(--cream);
@@ -91,6 +92,7 @@ a:focus-visible {
 
 .site-shell {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -138,9 +140,11 @@ a:focus-visible {
 }
 
 .nav-list a {
+  display: inline-block;
   font-size: 0.95rem;
   color: var(--ink-light);
   text-decoration: none;
+  padding: 0.35rem 0;
 }
 
 .nav-list a:hover,
@@ -217,6 +221,10 @@ a:focus-visible {
   width: 100%;
 }
 
+img {
+  max-width: 100%;
+}
+
 .polaroid-caption {
   font-family: var(--font-display);
   font-style: italic;
@@ -289,6 +297,26 @@ a:focus-visible {
   background: #a8503a;
   border-color: #a8503a;
   color: #fff;
+}
+
+/* Home hero — text beside portrait, stacking on small screens */
+
+.home-hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2.5rem;
+  align-items: start;
+  margin-top: 2.5rem;
+}
+
+.home-hero-portrait {
+  max-width: 220px;
+}
+
+/* Scrapbook opened-page padding */
+
+.scrapbook-page {
+  padding: 2rem 2rem 1.5rem 2.5rem;
 }
 
 /* Two-column layout */
@@ -368,6 +396,50 @@ a:focus-visible {
   color: var(--ink-light);
 }
 
+/* Project status stamp — reads like an ink stamp on the page */
+
+.status-stamp {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  padding: 0.1rem 0.55rem;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  white-space: nowrap;
+  transform: rotate(-1.5deg);
+}
+
+.status-finished {
+  color: var(--sage);
+  background: rgba(106, 140, 106, 0.09);
+}
+
+.status-wip {
+  color: var(--gold);
+  background: rgba(196, 154, 58, 0.11);
+}
+
+h1 .status-stamp,
+h2 .status-stamp {
+  margin-left: 0.6rem;
+  position: relative;
+  top: -0.15em;
+}
+
+/* Project action links */
+
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
 /* Collage helpers */
 
 .tilt-left {
@@ -413,18 +485,12 @@ a:focus-visible {
 /* Responsive helpers */
 
 @media (max-width: 600px) {
-  article section > figure.polaroid {
+  article section > figure.polaroid:not(.figure-wide) {
     float: none !important;
     margin: 1rem auto !important;
     display: block;
     width: min(260px, 80%) !important;
     max-width: 80% !important;
-  }
-}
-
-@media (max-width: 700px) {
-  .hide-mobile {
-    display: none;
   }
 }
 
@@ -437,5 +503,117 @@ a:focus-visible {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* ========================================
+   Mobile
+   ======================================== */
+
+@media (max-width: 760px) {
+  body {
+    font-size: 1rem;
+    line-height: 1.68;
+  }
+
+  .site-nav {
+    gap: 0.25rem 1.1rem;
+    padding: 1.1rem var(--space) 0.75rem;
+  }
+
+  .nav-list {
+    gap: 0 1.1rem;
+  }
+
+  .site-main {
+    padding-top: var(--space);
+  }
+
+  .lead {
+    font-size: 1.06rem;
+  }
+
+  /* Portrait moves below the text instead of disappearing. */
+  .home-hero {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+
+  .home-hero-portrait {
+    max-width: 180px;
+  }
+
+  .scrapbook-page {
+    padding: 1.1rem 1rem 1.1rem 1.25rem;
+  }
+
+  .play-tabs {
+    gap: 0.4rem;
+  }
+
+  .play-tabs a {
+    padding: 0.45rem 0.85rem;
+  }
+
+  .wavy-rule {
+    margin: 1.75rem 0;
+  }
+
+  h2 {
+    margin-top: 1.9rem;
+  }
+
+  /* Stamps wrap under long headings rather than stretching the line. */
+  h1 .status-stamp,
+  h2 .status-stamp {
+    margin-left: 0.45rem;
+  }
+
+  .project-actions .btn {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+}
+
+/* PDF embeds do not render in most mobile browsers; swap in a link card. */
+
+.resume-embed {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid var(--cream-dark);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.resume-embed iframe {
+  width: 100%;
+  height: 1000px;
+  border: none;
+  display: block;
+}
+
+.resume-fallback {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .resume-embed {
+    display: none;
+  }
+
+  .resume-fallback {
+    display: block;
+    margin-top: 1.5rem;
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 420px) {
+  .polaroid {
+    padding: 8px 8px 30px;
   }
 }

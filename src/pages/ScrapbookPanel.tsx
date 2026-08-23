@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const photos = [
   { src: "/images/scrapbook/DSCF2097.jpg", caption: "Venice, Grand Canal" },
@@ -53,6 +53,8 @@ export default function ScrapbookPanel() {
   const [page, setPage] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
+  useEffect(() => () => clearTimeout(timerRef.current), []);
+
   const handleOpen = () => {
     if (coverFlipped) return;
     setCoverFlipped(true);
@@ -96,11 +98,16 @@ export default function ScrapbookPanel() {
       <style>{`
         .book-container {
           perspective: 1400px;
-          width: min(620px, 92vw);
-          height: min(440px, 70vw);
+          width: min(620px, 86vw);
+          height: min(440px, 66vw);
           cursor: pointer;
           position: relative;
           margin: 1.5rem auto 0;
+        }
+        .book-container:focus-visible {
+          outline: 2px solid var(--rust, #c4654a);
+          outline-offset: 14px;
+          border-radius: 4px;
         }
         .book-base {
           position: absolute; inset: 0;
@@ -207,7 +214,19 @@ export default function ScrapbookPanel() {
 
       {!opened && (
         <>
-          <div className="book-container" onClick={handleOpen} title="Click to open">
+          <div
+            className="book-container"
+            role="button"
+            tabIndex={0}
+            aria-label="Open the scrapbook"
+            onClick={handleOpen}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleOpen();
+              }
+            }}
+          >
             <div className="book-base" />
             <div className="pages-stack" />
             <div className="book-spine" />
@@ -227,7 +246,7 @@ export default function ScrapbookPanel() {
             </div>
             <div className="book-strap" />
           </div>
-          {!coverFlipped && <div className="open-hint">click to open</div>}
+          {!coverFlipped && <div className="open-hint">click or press enter to open</div>}
         </>
       )}
 
@@ -256,7 +275,7 @@ export default function ScrapbookPanel() {
             }}
           />
 
-          <div style={{ padding: "2rem 2rem 1.5rem 2.5rem", position: "relative", zIndex: 1 }}>
+          <div className="scrapbook-page" style={{ position: "relative", zIndex: 1 }}>
             <div style={{
               display: "flex",
               justifyContent: "space-between",
