@@ -14,9 +14,10 @@ export default function HomeLanding() {
       <div style={{ maxWidth: "640px" }}>
         <h1>Hi, I'm Keith.</h1>
         <p className="lead">
-          Computer Engineering student at Georgia Tech. I build systems
-          that bridge hardware and software, and I care about the
-          people and stories behind the work.
+          I'm a Computer Engineering student at Georgia Tech, originally
+          from Hendersonville, NC. I like building things, breaking them,
+          and figuring out why they broke, and I'm usually happiest doing
+          it with other people.
         </p>
       </div>
 

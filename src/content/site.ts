@@ -9,9 +9,9 @@ export const site = {
 };
 
 export const welcomeBullets = [
-  "I am a Computer Engineering student who likes systems that behave honestly on the bench and in code.",
+  "I've been hooked on computers ever since I built my first PC during COVID. These days I'm into anything that mixes hardware and software, especially when I get to see it actually run in the real world.",
   "This site is split into chapters: a mosaic About me, a workshop Projects index, and a softer Play room for photos, piano, the garden, and baking.",
-  "I care about leadership that reduces confusion: clear decisions, documented trade-offs, and teammates who feel heard.",
+  "Outside of school, you'll probably find me playing piano, out in the garden, baking something, or saying \"why not?\" to whatever plan my friends come up with.",
 ];
 
 export const careerGoals = {
