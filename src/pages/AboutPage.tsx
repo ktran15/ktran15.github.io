@@ -16,7 +16,7 @@ export default function AboutPage() {
             <h1>Welcome</h1>
             <p className="lead" style={{ maxWidth: "56ch" }}>
               Thanks for stopping by! I'm Keith Tran, a Computer Engineering
-              student at Georgia Tech. This site is a window into who I am — the
+              student at Georgia Tech. This site is a window into who I am: the
               projects I build, the stories that shaped me, and the things I care
               about beyond the classroom. I hope you find something here that
               resonates, and I'd love to connect.
@@ -87,15 +87,16 @@ export default function AboutPage() {
       <section style={{ marginTop: "2rem" }}>
         <h2>Strengths and Growth Edges</h2>
         <p>
-          <strong>Strengths:</strong> I stay calm when hardware
-          misbehaves; I write things down; I ask clarifying questions
-          before optimizing the wrong variable.
+          <strong>Strengths:</strong> I like to jump in and get my hands
+          dirty, even if I don't get it right the first time. I'm usually the
+          one asking why something works, and I'm happiest when I'm working
+          alongside other people.
         </p>
         <p>
-          <strong>Growth Edges:</strong> I'm still learning when to stop
-          perfecting a prototype and when to ship. I'm practicing
-          estimation, delegation, and giving feedback that is kind and
-          specific.
+          <strong>Growth Edges:</strong> I'm working on my time management,
+          since everything seems to take longer than I think it will. I'm
+          also still learning when to stop perfecting something and call it
+          good enough.
         </p>
       </section>
 
@@ -103,10 +104,10 @@ export default function AboutPage() {
 
       {/* Biography mosaic */}
       <section>
-        <h2>A mosaic, not a single story</h2>
+        <h2>My mosaic</h2>
         <p style={{ color: "var(--ink-light)", maxWidth: "56ch", marginBottom: "1.5rem" }}>
-          Below are fragments of how I grew up and what I carry into every
-          team and every build.
+          These are the pieces that made me who I am. Some are old, some are
+          new, and a few are a little embarrassing, but they're all me.
         </p>
       </section>
 
@@ -126,21 +127,39 @@ export default function AboutPage() {
               }}
             >
               <div
-                className={`polaroid ${imageOnLeft ? "tilt-left" : "tilt-right"}`}
                 style={{
                   flex: "0 0 auto",
                   maxWidth: "340px",
                   width: "100%",
                 }}
               >
-                <img
-                  src={tile.image}
-                  alt={tile.title}
-                  loading="lazy"
-                  decoding="async"
-                  style={{ width: "100%", display: "block", borderRadius: "4px" }}
-                />
-                <p className="polaroid-caption">{tile.micro}</p>
+                {tile.photos.map((photo, j) => {
+                  const paired = tile.photos.length > 1;
+                  const tilt = (j % 2 === 0) === imageOnLeft ? "tilt-left" : "tilt-right";
+                  return (
+                    <div
+                      key={photo.src}
+                      className={`polaroid ${tilt}`}
+                      style={{
+                        display: "block",
+                        position: "relative",
+                        zIndex: j,
+                        width: paired ? "78%" : "100%",
+                        marginLeft: paired && j % 2 === 1 ? "auto" : undefined,
+                        marginTop: j > 0 ? "-14%" : undefined,
+                      }}
+                    >
+                      <img
+                        src={photo.src}
+                        alt={photo.alt}
+                        loading="lazy"
+                        decoding="async"
+                        style={{ width: "100%", display: "block", borderRadius: "4px" }}
+                      />
+                      <p className="polaroid-caption">{photo.caption}</p>
+                    </div>
+                  );
+                })}
               </div>
 
               <div style={{ flex: "1 1 300px", minWidth: 0 }}>

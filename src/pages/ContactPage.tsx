@@ -30,7 +30,7 @@ export default function ContactPage() {
     <div>
       <h1>Let's talk</h1>
       <p className="lead">
-        I'd love to hear from you — feel free to reach out through any of the channels below.
+        I'd love to hear from you, so feel free to reach out through any of the channels below.
       </p>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "2.5rem", alignItems: "flex-start", marginTop: "2.5rem" }}>

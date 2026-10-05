@@ -15,11 +15,11 @@ export const welcomeBullets = [
 ];
 
 export const careerGoals = {
-  longTerm: `I want a career where I can own problems end to end: from sensing and signal integrity to the software that makes a system understandable to humans. I am drawn to roles that reward careful measurement, ethical product decisions, and mentorship.`,
+  longTerm: `I'm still young, and honestly, I'm still figuring out exactly what I want to do and how I want to get there. What I do know is that I want to build things that make an impact, working across both hardware and software. At Elkamet, I got to see something I built running on a real production line every day, and through Create-X, I've gotten a taste of what it takes to build a startup from the ground up. One day, I want to start my own company. Along the way, I want to keep talking to people, working in teams, getting feedback, and getting a little better every time.`,
   steps: [
-    "Deepen mixed-signal and embedded fundamentals through labs, projects, and peer teaching.",
-    "Ship two portfolio-quality case studies with real artifacts: schematics, code, tests, and honest failure logs.",
-    "Practice communication: writing, speaking, and visual explanation for non-expert audiences.",
-    "Build community: study groups, clubs, or open-source contributions with consistent commits.",
+    "Learning as much as I can in my classes at Georgia Tech.",
+    "Getting real-world experience through internships like Elkamet.",
+    "Learning what it takes to start a company through Create-X.",
+    "Building personal projects that mix hardware and software.",
   ],
 };

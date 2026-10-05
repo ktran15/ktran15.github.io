@@ -1,5 +1,5 @@
 /* ========================================
-   V2: Warm, light, tactile — not AI slop
+   V2: Warm, light, tactile: not AI slop
    ======================================== */
 
 :root {
@@ -42,7 +42,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Typography — big, warm, characterful */
+/* Typography: big, warm, characterful */
 
 h1, h2, h3 {
   font-family: var(--font-display);
@@ -105,7 +105,7 @@ a:focus-visible {
   padding: calc(var(--space) * 1.5) var(--space) calc(var(--space) * 3);
 }
 
-/* Navigation — simple, warm, personal */
+/* Navigation: simple, warm, personal */
 
 .site-nav {
   display: flex;
@@ -152,7 +152,7 @@ a:focus-visible {
   color: var(--rust);
 }
 
-/* Footer — quiet */
+/* Footer: quiet */
 
 .site-footer {
   padding: 2rem var(--space);
@@ -187,7 +187,7 @@ a:focus-visible {
   opacity: 0.5;
 }
 
-/* Torn paper edge — apply to sections */
+/* Torn paper edge: apply to sections */
 
 .torn-top {
   clip-path: polygon(
@@ -257,7 +257,7 @@ img {
   border-radius: 2px;
 }
 
-/* Paper card — lighter */
+/* Paper card: lighter */
 
 .paper-card {
   background: #fff;
@@ -266,7 +266,7 @@ img {
   border-radius: 4px;
 }
 
-/* Buttons — warm, not pill-shaped SaaS */
+/* Buttons: warm, not pill-shaped SaaS */
 
 .btn {
   display: inline-block;
@@ -299,7 +299,7 @@ img {
   color: #fff;
 }
 
-/* Home hero — text beside portrait, stacking on small screens */
+/* Home hero: text beside portrait, stacking on small screens */
 
 .home-hero {
   display: grid;
@@ -358,7 +358,7 @@ img {
   background: rgba(196, 101, 74, 0.06);
 }
 
-/* Section label — NOT monospace, small caps */
+/* Section label: NOT monospace, small caps */
 
 .section-label {
   font-family: var(--font-body);
@@ -396,7 +396,7 @@ img {
   color: var(--ink-light);
 }
 
-/* Project status stamp — reads like an ink stamp on the page */
+/* Project status stamp: reads like an ink stamp on the page */
 
 .status-stamp {
   display: inline-block;
